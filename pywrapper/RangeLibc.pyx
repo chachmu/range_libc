@@ -124,7 +124,7 @@ def quaternion_to_angle(q):
     This is not just the z component of the quaternion."""
     siny_cosp = 2.0 * (q.w * q.z + q.x * q.y);
     cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z);
-    return np.atan2(siny_cosp, cosy_cosp);
+    return np.arctan2(siny_cosp, cosy_cosp);
 
 cdef class PyOMap:
     cdef OMap *thisptr      # hold a C++ instance which we're wrapping
@@ -139,8 +139,8 @@ cdef class PyOMap:
             if isinstance(arg1, np.ndarray):
                 height, width = arg1.shape
                 self.thisptr = new OMap(<int>height,<int>width)
-                for y in xrange(height):
-                    for x in xrange(width):
+                for y in range(height):
+                    for x in range(width):
                         self.thisptr.grid[x][y] = <bool>arg1[y,x]
             elif USE_ROS_MAP and isinstance(arg1, OccupancyGrid):
                 map_msg = arg1
@@ -150,8 +150,8 @@ cdef class PyOMap:
                 # 0: permissible, -1: unmapped, 100: blocked
                 array_255 = np.array(map_msg.data).reshape((height, width))
 
-                for x in xrange(height):
-                    for y in xrange(width):
+                for x in range(height):
+                    for y in range(width):
                         if array_255[x,y] > 10:
                             self.thisptr.grid[x][y] = True
 
